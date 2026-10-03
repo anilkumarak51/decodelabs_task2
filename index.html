@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Backend API</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 900px;
+            margin: 50px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #222;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 35px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        button {
+            border: none;
+            padding: 14px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .get-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .post-btn {
+            background: #16a34a;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.85;
+        }
+
+        .form {
+            display: none;
+            margin-top: 20px;
+            padding: 25px;
+            background: #f8fafc;
+            border-radius: 10px;
+        }
+
+        .form input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        .submit-btn {
+            background: #16a34a;
+            color: white;
+            margin-top: 10px;
+        }
+
+        .result {
+            margin-top: 25px;
+            background: #111827;
+            color: #22c55e;
+            padding: 20px;
+            border-radius: 10px;
+            min-height: 100px;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <div class="container">
+
+        <h1>Backend API</h1>
+
+        <p class="subtitle">
+            Student Management API
+        </p>
+
+
+        <!-- GET and POST buttons -->
+
+        <div class="buttons">
+
+            <button class="get-btn" onclick="getStudents()">
+                GET Students
+            </button>
+
+            <button class="post-btn" onclick="showPostForm()">
+                POST Student
+            </button>
+
+        </div>
+
+
+        <!-- POST Form -->
+
+        <div class="form" id="postForm">
+
+            <h2>Add New Student</h2>
+
+            <input
+                type="text"
+                id="name"
+                placeholder="Enter student name"
+            >
+
+            <input
+                type="number"
+                id="age"
+                placeholder="Enter age"
+            >
+
+            <input
+                type="text"
+                id="course"
+                placeholder="Enter course"
+            >
+
+            <button
+                class="submit-btn"
+                onclick="addStudent()"
+            >
+                Add Student
+            </button>
+
+        </div>
+
+
+        <!-- Result -->
+
+        <div class="result" id="result">
+            Click GET Students or POST Student
+        </div>
+
+    </div>
+
+
+    <script>
+
+        // GET students
+
+        async function getStudents() {
+
+            try {
+
+                const response = await fetch("/api/students");
+
+                const data = await response.json();
+
+                document.getElementById("result").textContent =
+                    JSON.stringify(data, null, 4);
+
+            }
+            catch (error) {
+
+                document.getElementById("result").textContent =
+                    "Error connecting to server";
+
+            }
+
+        }
+
+
+        // Show POST form
+
+        function showPostForm() {
+
+            document.getElementById("postForm").style.display = "block";
+
+        }
+
+
+        // POST student
+
+        async function addStudent() {
+
+            const name =
+                document.getElementById("name").value;
+
+            const age =
+                document.getElementById("age").value;
+
+            const course =
+                document.getElementById("course").value;
+
+
+            try {
+
+                const response = await fetch("/api/students", {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        name: name,
+
+                        age: age,
+
+                        course: course
+
+                    })
+
+                });
+
+
+                const data = await response.json();
+
+
+                document.getElementById("result").textContent =
+                    JSON.stringify(data, null, 4);
+
+            }
+            catch (error) {
+
+                document.getElementById("result").textContent =
+                    "Error connecting to server";
+
+            }
+
+        }
+
+    </script>
+
+</body>
+
+</html>
